@@ -14,7 +14,7 @@
     </properties>
 
     <build>
-        <finalName>devOps-lab03</finalName>
+        <finalName>devops-lab03</finalName>
     </build>
 
 </project>

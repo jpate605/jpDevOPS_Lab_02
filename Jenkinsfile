@@ -1,5 +1,8 @@
 pipeline{
     agent any
+        environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-login')
+    }
     tools{
         maven 'Maven'
     }
@@ -13,21 +16,23 @@ pipeline{
         stage('Build docker image') {
             steps{
                 script{
-                    sh 'docker build -t firstdockerimage/devops-lab03 .'
+                    sh 'docker build -t jigneshpatelstudent/devops-lab03 .'
                 }
             }
         }
-        stage('Push image to Hub'){
+        stage('Docker Login') {
             steps{
                 script{
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 
-                    withCredentials([string(credentialsId: 'dockerusername', variable: 'dockerhubusername'), string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpassword')]) {
-                    sh 'docker login --username ${dockerhubusername} --password ${dockerhubpassword}'
-                    }
 
-                    sh 'docker push firstdockerimage/devops-lab03'
                 }
             }
+        }
+        stage('Docker Push image') {
+            steps {
+                sh 'docker push jigneshpatelstudent/devops-lab03'
+           }
         }
     }
 }
